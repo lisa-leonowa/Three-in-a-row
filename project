@@ -215,8 +215,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            a += 1
-    if a == 1 or a == 2:
+            a = 0
+    if a == 1:
         screen.blit(new_image, (0, 0))
     else:
         screen.fill(BG_COLOR)
