@@ -1,0 +1,47 @@
+import pygame
+from random import choice
+
+
+BG_COLOR = (50, 50, 50)
+SIZE = (509, 509)
+
+COLORS = ((227, 76, 0), (227, 227, 0), (57, 227, 0), (0, 227, 227), (113, 0, 227), (227, 0, 113))
+
+window = pygame.display.set_mode(SIZE)
+screen = pygame.Surface(SIZE)
+
+
+class Plitka:
+    color = (150, 40, 40)
+
+    def __init__(self, x, y, surface, color=color):
+        self.image = pygame.Surface((50, 50))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.color = color
+        self.surface = surface
+        self.image.fill(self.color)
+
+    # отрисовка плиток
+    def draw(self):
+        self.surface.blit(self.image, (self.rect.x, self.rect.y))
+
+plitki = []
+for row in range(10):
+    for col in range(10):
+        plitki.append(Plitka(x=row*51, y=col*51, surface=screen, color=choice(COLORS)))
+
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill(BG_COLOR)
+    for i in plitki:
+        i.draw()
+
+    window.blit(screen, (0, 0))
+    pygame.display.flip()
