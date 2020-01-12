@@ -13,6 +13,9 @@ screen = pygame.Surface(SIZE)
 
 class Plitka:
     color = (150, 40, 40)
+    DEACTIVE_COLOR = (150, 150, 150)
+    CLICKED_COLOR = (255, 255, 255)  # цвет когда плитка нажата
+    HOVER_COLOR = (180, 150, 150)  # цвет плиток, на которые наведен курсор
 
     def __init__(self, x, y, surface, color=color):
         self.image = pygame.Surface((50, 50))
@@ -22,10 +25,35 @@ class Plitka:
         self.color = color
         self.surface = surface
         self.image.fill(self.color)
+        self.is_selected = False
+        self.is_deactive = False
 
     # отрисовка плиток
     def draw(self):
+        self.change_color()
         self.surface.blit(self.image, (self.rect.x, self.rect.y))
+
+    # меняет цвета плиток, если на нее кликнули
+    def change_color(self):
+        if self.clicked() or self.is_selected:
+            self.image.fill(self.CLICKED_COLOR)
+        elif self.collide_cursor():
+            pygame.draw.rect(self.surface, self.HOVER_COLOR, self.rect, 4)
+        elif self.is_deactive:
+            pygame.draw.rect(self.surface, self.CLICKED_COLOR, self.rect, 4)
+        else:
+            self.image.fill(self.color)
+
+    # отслеживает нажата ли какая нибудь плитка
+    def clicked(self):
+        if self.collide_cursor():
+            return pygame.mouse.get_pressed() == (1, 0, 0)  # если зажата левая кнопка мыши
+
+    # определяет находится ли курсор над текущей плиткой
+    def collide_cursor(self):
+        mx, my = pygame.mouse.get_pos()
+        return self.rect.left < mx < self.rect.right and self.rect.top < my < self.rect.bottom
+        # возврат выполнения этого условия, либо True, либо False
 
 plitki = []
 for row in range(10):
